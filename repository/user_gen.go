@@ -208,16 +208,25 @@ func (repo *userRepository) RunInTransaction() func(ctx context.Context, f func(
 
 // UserSearchParam - params for search
 type UserSearchParam struct {
-	Name         *QueryChainer
-	PrimaryEmail *QueryChainer
-	IsAdmin      *QueryChainer
-	CreatedAt    *QueryChainer
-	CreatedBy    *QueryChainer
-	DeletedAt    *QueryChainer
-	DeletedBy    *QueryChainer
-	UpdatedAt    *QueryChainer
-	UpdatedBy    *QueryChainer
-	Version      *QueryChainer
+	Name                       *QueryChainer
+	PrimaryEmail               *QueryChainer
+	Domain                     *QueryChainer
+	IsAdmin                    *QueryChainer
+	LINEWorksState             *QueryChainer
+	LINEWorksAccessToken       *QueryChainer
+	LINEWorksRefreshToken      *QueryChainer
+	GoogleCalendarEmail        *QueryChainer
+	GoogleCalendarAccessToken  *QueryChainer
+	GoogleCalendarRefreshToken *QueryChainer
+	GoogleCalendarTokenType    *QueryChainer
+	GoogleCalendarExpiry       *QueryChainer
+	CreatedAt                  *QueryChainer
+	CreatedBy                  *QueryChainer
+	DeletedAt                  *QueryChainer
+	DeletedBy                  *QueryChainer
+	UpdatedAt                  *QueryChainer
+	UpdatedBy                  *QueryChainer
+	Version                    *QueryChainer
 
 	IncludeSoftDeleted bool
 	CursorLimit        int
@@ -225,15 +234,24 @@ type UserSearchParam struct {
 
 // UserUpdateParam - params for strict updates
 type UserUpdateParam struct {
-	Name         interface{}
-	IsAdmin      interface{}
-	CreatedAt    interface{}
-	CreatedBy    interface{}
-	DeletedAt    interface{}
-	DeletedBy    interface{}
-	UpdatedAt    interface{}
-	UpdatedBy    interface{}
-	Version      interface{}
+	Name                       interface{}
+	Domain                     interface{}
+	IsAdmin                    interface{}
+	LINEWorksState             interface{}
+	LINEWorksAccessToken       interface{}
+	LINEWorksRefreshToken      interface{}
+	GoogleCalendarEmail        interface{}
+	GoogleCalendarAccessToken  interface{}
+	GoogleCalendarRefreshToken interface{}
+	GoogleCalendarTokenType    interface{}
+	GoogleCalendarExpiry       interface{}
+	CreatedAt                  interface{}
+	CreatedBy                  interface{}
+	DeletedAt                  interface{}
+	DeletedBy                  interface{}
+	UpdatedAt                  interface{}
+	UpdatedBy                  interface{}
+	Version                    interface{}
 }
 
 // Search - search documents
@@ -1130,6 +1148,15 @@ func (repo *userRepository) search(v interface{}, param *UserSearchParam, q *fir
 				query = param.PrimaryEmail.BuildCursorQuery(query)
 			}
 		}
+		if param.Domain != nil {
+			for _, chain := range param.Domain.QueryGroup {
+				query = query.Where("Domain", chain.Operator, chain.Value)
+			}
+			if direction := param.Domain.OrderByDirection; direction > 0 {
+				query = query.OrderBy("Domain", direction)
+				query = param.Domain.BuildCursorQuery(query)
+			}
+		}
 		if param.IsAdmin != nil {
 			for _, chain := range param.IsAdmin.QueryGroup {
 				query = query.Where("IsAdmin", chain.Operator, chain.Value)
@@ -1137,6 +1164,78 @@ func (repo *userRepository) search(v interface{}, param *UserSearchParam, q *fir
 			if direction := param.IsAdmin.OrderByDirection; direction > 0 {
 				query = query.OrderBy("IsAdmin", direction)
 				query = param.IsAdmin.BuildCursorQuery(query)
+			}
+		}
+		if param.LINEWorksState != nil {
+			for _, chain := range param.LINEWorksState.QueryGroup {
+				query = query.Where("LINEWorksState", chain.Operator, chain.Value)
+			}
+			if direction := param.LINEWorksState.OrderByDirection; direction > 0 {
+				query = query.OrderBy("LINEWorksState", direction)
+				query = param.LINEWorksState.BuildCursorQuery(query)
+			}
+		}
+		if param.LINEWorksAccessToken != nil {
+			for _, chain := range param.LINEWorksAccessToken.QueryGroup {
+				query = query.Where("LINEWorksAccessToken", chain.Operator, chain.Value)
+			}
+			if direction := param.LINEWorksAccessToken.OrderByDirection; direction > 0 {
+				query = query.OrderBy("LINEWorksAccessToken", direction)
+				query = param.LINEWorksAccessToken.BuildCursorQuery(query)
+			}
+		}
+		if param.LINEWorksRefreshToken != nil {
+			for _, chain := range param.LINEWorksRefreshToken.QueryGroup {
+				query = query.Where("LINEWorksRefreshToken", chain.Operator, chain.Value)
+			}
+			if direction := param.LINEWorksRefreshToken.OrderByDirection; direction > 0 {
+				query = query.OrderBy("LINEWorksRefreshToken", direction)
+				query = param.LINEWorksRefreshToken.BuildCursorQuery(query)
+			}
+		}
+		if param.GoogleCalendarEmail != nil {
+			for _, chain := range param.GoogleCalendarEmail.QueryGroup {
+				query = query.Where("GoogleCalendarEmail", chain.Operator, chain.Value)
+			}
+			if direction := param.GoogleCalendarEmail.OrderByDirection; direction > 0 {
+				query = query.OrderBy("GoogleCalendarEmail", direction)
+				query = param.GoogleCalendarEmail.BuildCursorQuery(query)
+			}
+		}
+		if param.GoogleCalendarAccessToken != nil {
+			for _, chain := range param.GoogleCalendarAccessToken.QueryGroup {
+				query = query.Where("GoogleCalendarAccessToken", chain.Operator, chain.Value)
+			}
+			if direction := param.GoogleCalendarAccessToken.OrderByDirection; direction > 0 {
+				query = query.OrderBy("GoogleCalendarAccessToken", direction)
+				query = param.GoogleCalendarAccessToken.BuildCursorQuery(query)
+			}
+		}
+		if param.GoogleCalendarRefreshToken != nil {
+			for _, chain := range param.GoogleCalendarRefreshToken.QueryGroup {
+				query = query.Where("GoogleCalendarRefreshToken", chain.Operator, chain.Value)
+			}
+			if direction := param.GoogleCalendarRefreshToken.OrderByDirection; direction > 0 {
+				query = query.OrderBy("GoogleCalendarRefreshToken", direction)
+				query = param.GoogleCalendarRefreshToken.BuildCursorQuery(query)
+			}
+		}
+		if param.GoogleCalendarTokenType != nil {
+			for _, chain := range param.GoogleCalendarTokenType.QueryGroup {
+				query = query.Where("GoogleCalendarTokenType", chain.Operator, chain.Value)
+			}
+			if direction := param.GoogleCalendarTokenType.OrderByDirection; direction > 0 {
+				query = query.OrderBy("GoogleCalendarTokenType", direction)
+				query = param.GoogleCalendarTokenType.BuildCursorQuery(query)
+			}
+		}
+		if param.GoogleCalendarExpiry != nil {
+			for _, chain := range param.GoogleCalendarExpiry.QueryGroup {
+				query = query.Where("GoogleCalendarExpiry", chain.Operator, chain.Value)
+			}
+			if direction := param.GoogleCalendarExpiry.OrderByDirection; direction > 0 {
+				query = query.OrderBy("GoogleCalendarExpiry", direction)
+				query = param.GoogleCalendarExpiry.BuildCursorQuery(query)
 			}
 		}
 		if param.CreatedAt != nil {

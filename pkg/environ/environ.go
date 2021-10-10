@@ -8,11 +8,33 @@ import (
 )
 
 var (
-	projectID         = getProjectID()
-	serviceName       = os.Getenv(definitions.EnvKeyServiceName)
-	serviceVersion    = os.Getenv(definitions.EnvKeyServiceVersion)
-	ServiceHostDomain string
+	projectID               = getProjectID()
+	serviceName             = os.Getenv(definitions.EnvKeyServiceName)
+	serviceVersion          = os.Getenv(definitions.EnvKeyServiceVersion)
+	googleOAuthClientID     = os.Getenv(definitions.EnvKeyGoogleOAuthClientID)
+	googleOAuthClientSecret = os.Getenv(definitions.EnvKeyGoogleOAuthClientSecret)
+	lineWorksAppID          = os.Getenv(definitions.EnvKeyLineWorksAppID)
+	lineWorksConsumerKey    = os.Getenv(definitions.EnvKeyLineWorksConsumerKey)
+	allowDomains            = strings.Split(os.Getenv(definitions.EnvKeyAllowDomains), ",")
+	adminAccount            = os.Getenv(definitions.EnvKeyAdminAccount)
+	ServiceHostDomain       string
 )
+
+func GetGoogleOAuthClientID() string {
+	return googleOAuthClientID
+}
+
+func GetGoogleOAuthClientSecret() string {
+	return googleOAuthClientSecret
+}
+
+func GetLineWorksAppID() string {
+	return lineWorksAppID
+}
+
+func GetLineWorksConsumerKey() string {
+	return lineWorksConsumerKey
+}
 
 func getProjectID() string {
 	id, ok := os.LookupEnv(definitions.EnvKeyProjectID)
@@ -76,4 +98,19 @@ func GetServiceVersion() string {
 		return "1.0"
 	}
 	return serviceVersion
+}
+
+// IsAllowDomain - バージョンを取得する
+func IsAllowDomain(domain string) bool {
+	for _, row := range allowDomains {
+		if row == domain {
+			return true
+		}
+	}
+	return false
+}
+
+// IsAdmin - バージョンを取得する
+func IsAdmin(account string) bool {
+	return account == adminAccount
 }

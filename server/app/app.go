@@ -7,7 +7,10 @@ import (
 	"os"
 
 	"github.com/labstack/echo/v4"
-	"github.com/office-aska/lwgc/server/app/controller/organization"
+	"github.com/labstack/echo/v4/middleware"
+	"github.com/office-aska/lwgc/pkg/environ"
+	"github.com/office-aska/lwgc/server/app/controller/googlecalendar"
+	"github.com/office-aska/lwgc/server/app/controller/lineworks"
 	"github.com/office-aska/lwgc/server/app/controller/signin"
 	"github.com/office-aska/lwgc/server/app/controller/top"
 )
@@ -19,6 +22,20 @@ func Bootstrap() {
 	e.Renderer = NewTemplate()
 
 	e.Use(authorizer)
+	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+		Skipper: func(c echo.Context) bool {
+			// if strings.HasPrefix(c.Request().URL.Path, "/tq/") {
+			// 	return true
+			// }
+			// return c.Request().URL.Path == "/media/upload/callback"
+			return false
+		},
+		TokenLookup:    "form:csrf_token",
+		CookiePath:     "/",
+		CookieMaxAge:   365 * 24 * 60 * 60,
+		CookieSecure:   !environ.IsLocal(),
+		CookieHTTPOnly: true,
+	}))
 	SetErrorHandler(e)
 
 	// memorystore.Init()
@@ -36,18 +53,23 @@ func Bootstrap() {
 	e.GET("/signin/", signin.Root)
 	e.GET("/signin/callback", signin.Callback)
 	e.GET("/signout/", signin.SignOut)
-	e.GET("/organization/", organization.Root)
-	e.GET("/organization/create", organization.Create)
-	e.POST("/organization/create", organization.CreatePost)
-	e.GET("/organization/:id/", organization.View)
-	e.GET("/organization/:id/update", organization.Update)
-	e.POST("/organization/:id/update", organization.UpdatePost)
-	e.GET("/organization/:oid/user/", organization.UserRoot)
-	e.GET("/organization/:oid/user/create", organization.UserCreate)
-	e.POST("/organization/:oid/user/create", organization.UserCreatePost)
-	e.GET("/organization/:oid/user/:uid/", organization.UserView)
-	e.GET("/organization/:oid/user/:uid/update", organization.UserUpdate)
-	e.POST("/organization/:oid/user/:uid/update", organization.UserUpdatePost)
+	e.GET("/lineworks/", lineworks.Root)
+	e.GET("/lineworks/callback", lineworks.Callback)
+	e.GET("/googlecalendar/", googlecalendar.Root)
+	e.POST("/googlecalendar/", googlecalendar.Post)
+	e.GET("/googlecalendar/callback", googlecalendar.Callback)
+	// e.GET("/organization/", organization.Root)
+	// e.GET("/organization/create", organization.Create)
+	// e.POST("/organization/create", organization.CreatePost)
+	// e.GET("/organization/:id/", organization.View)
+	// e.GET("/organization/:id/update", organization.Update)
+	// e.POST("/organization/:id/update", organization.UpdatePost)
+	// e.GET("/organization/:oid/user/", organization.UserRoot)
+	// e.GET("/organization/:oid/user/create", organization.UserCreate)
+	// e.POST("/organization/:oid/user/create", organization.UserCreatePost)
+	// e.GET("/organization/:oid/user/:uid/", organization.UserView)
+	// e.GET("/organization/:oid/user/:uid/update", organization.UserUpdate)
+	// e.POST("/organization/:oid/user/:uid/update", organization.UserUpdatePost)
 	// e.GET("/event/", event.Root)
 	// e.GET("/event/create", event.Create)
 	// e.POST("/event/create", event.CreatePost)

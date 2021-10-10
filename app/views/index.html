@@ -1,5 +1,100 @@
 {{- define "content" -}}
-<div class="container-fluid">
-  <h1>LINE Works and Google Calendar Sync Tool</h1>
+<div class="container">
+  <h1 class="fs-3">LINE Works and Google Calendar Sync Tool</h1>
+  <hr>
+  <h1 class="fs-5">プロフィール</h1>
+  <div>
+    <table class="table table-bordered table-hover">
+      <tbody>
+        <tr class="">
+          <th>メールアドレス</th>
+          <td>{{ .signInUser.PrimaryEmail }}</td>
+        </tr>
+        <tr class="">
+          <th>LINE WORKS</th>
+          <td>
+            {{ if .signInUser.LINEWorksAccessToken }}
+            <span class="badge bg-success">連携済み</span>
+            {{ else }}
+            <span class="badge bg-danger">未連携</span>
+            {{ end }}
+            <div class="float-end">
+              <a class="btn btn-primary btn-sm" href="/lineworks/">連携</a>
+            </div>
+          </td>
+        </tr>
+        <tr class="">
+          <th>Google Calender</th>
+          <td>
+            {{ if .signInUser.GoogleCalendarEmail }}
+            <span class="badge bg-success">連携済み</span>
+            {{ else }}
+            <span class="badge bg-danger">未連携</span>
+            {{ end }}
+            <div class="float-end">
+              <a class="btn btn-primary btn-sm" href="/googlecalendar/">連携</a>
+            </div>
+            {{ if .calendarListItems }}
+            {{ $signInUser := .signInUser }}
+            <div>
+              <form action="/googlecalendar/" method="post">
+                {{ .csrfField }}
+                <select name="id" class="form-control">
+                  <option></option>
+                  {{ range .calendarListItems }}
+                  {{ $val := eq $signInUser.GoogleCalendarEmail .Id }}
+                  <option value="{{ .Id }}" {{if $val}}selected{{end}}>{{ .Summary }}</option>
+                  {{ end }}
+                </select>
+                <button class="btn btn-primary btn-sm">設定</button>
+              </form>
+            </div>
+            {{ end }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <hr>
+  <h1 class="fs-5">カレンダー</h1>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr class="">
+        <th>日付</th>
+        <th>LINE WORKS</th>
+        <th>Google Calendar</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ range .rows }}
+      <tr class="">
+        <td>{{ .Date | DateTime }}</td>
+        <td>
+          {{ range .LineWorksEvents }}
+          <div class="text-break">
+            <div><a href="{{ .ViewURL }}">{{ .UID }}</a></div>
+            <div>{{ .SummaryDate }}</div>
+            <div>{{ .Summary }}</div>
+          </div>
+          {{ end }}
+        </td>
+        <td>
+          {{ range .GoogleCalendarEvents }}
+          {{ if not (eq .Status "cancelled") }}
+          <div class="text-break">
+            <div>{{ .ICalUID }}</div>
+            <div>{{ if .Start.DateTime }}{{ .Start.DateTime | TimeParse | DateTime }}{{ else }}{{ .Start.Date }}{{ end }}
+              <br>
+              {{ if .End.DateTime }}{{ .End.DateTime | TimeParse | DateTime }}{{ else }}{{ .End.Date }}{{ end }}</div>
+            <div>{{ .Summary }}</div>
+            <div>{{ .Status }}</div>
+          </div>
+          {{ end }}
+          {{ end }}
+        </td>
+      </tr>
+      {{ end }}
+    </tbody>
+  </table>
 </div>
 {{- end -}}

@@ -8,10 +8,18 @@ steps:
     env_variables:
       GOOGLE_OAUTH_CLIENT_ID: $$GOOGLE_OAUTH_CLIENT_ID
       GOOGLE_OAUTH_CLIENT_SECRET: $$GOOGLE_OAUTH_CLIENT_SECRET
+      LINE_WORKS_APP_ID: $$LINE_WORKS_APP_ID
+      LINE_WORKS_CONSUMER_KEY: $$LINE_WORKS_CONSUMER_KEY
+      ALLOW_DOMAINS: $$ALLOW_DOMAINS
+      ADMIN_ACCOUNT: $$ADMIN_ACCOUNT
     EOF
   secretEnv:
   - 'GOOGLE_OAUTH_CLIENT_ID'
   - 'GOOGLE_OAUTH_CLIENT_SECRET'
+  - 'LINE_WORKS_APP_ID'
+  - 'LINE_WORKS_CONSUMER_KEY'
+  - 'ALLOW_DOMAINS'
+  - 'ADMIN_ACCOUNT'
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
     - 'app'
@@ -24,3 +32,11 @@ availableSecrets:
     env: GOOGLE_OAUTH_CLIENT_ID
   - versionName: projects/$PROJECT_ID/secrets/GOOGLE_OAUTH_CLIENT_SECRET/versions/1
     env: GOOGLE_OAUTH_CLIENT_SECRET
+  - versionName: projects/$PROJECT_ID/secrets/LINE_WORKS_APP_ID/versions/1
+    env: LINE_WORKS_APP_ID
+  - versionName: projects/$PROJECT_ID/secrets/LINE_WORKS_CONSUMER_KEY/versions/1
+    env: LINE_WORKS_CONSUMER_KEY
+  - versionName: projects/$PROJECT_ID/secrets/ALLOW_DOMAINS/versions/1
+    env: ALLOW_DOMAINS
+  - versionName: projects/$PROJECT_ID/secrets/ADMIN_ACCOUNT/versions/1
+    env: ADMIN_ACCOUNT

@@ -6,8 +6,8 @@ import (
 	"encoding/hex"
 	"errors"
 	"net/http"
-	"os"
 	"regexp"
+	"strings"
 
 	"cloud.google.com/go/firestore"
 	"github.com/labstack/echo/v4"
@@ -26,8 +26,8 @@ const (
 
 func getConfig(r *http.Request) *oauth2.Config {
 	config := &oauth2.Config{
-		ClientID:     os.Getenv("GOOGLE_OAUTH_CLIENT_ID"),
-		ClientSecret: os.Getenv("GOOGLE_OAUTH_CLIENT_SECRET"),
+		ClientID:     environ.GetGoogleOAuthClientID(),
+		ClientSecret: environ.GetGoogleOAuthClientSecret(),
 		Endpoint: oauth2.Endpoint{
 			AuthURL:  authorizeEndpoint,
 			TokenURL: tokenEndpoint,
@@ -163,11 +163,19 @@ func Callback(c echo.Context) error {
 	}
 
 	email := tokenInfo.Email
+	parts := strings.Split(email, "@")
+	name := parts[0]
+	domain := parts[1]
+	if !environ.IsAllowDomain(domain) {
+		return errors.New("Invalid domain")
+	}
+
 	fsClient, err := firestore.NewClient(ctx, environ.GetProjectID())
 	if err != nil {
 		return err
 	}
 	defer fsClient.Close()
+
 	repo := repository.NewUserRepository(fsClient)
 	param := &repository.UserSearchParam{
 		PrimaryEmail: repository.NewQueryChainer().Equal(email),
@@ -176,11 +184,13 @@ func Callback(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	if len(rows) == 0 && email == "aska@nl-plus.co.jp" {
+
+	if len(rows) == 0 {
 		sub := &model.User{
-			Name:         "aska",
-			PrimaryEmail: "aska@nl-plus.co.jp",
-			IsAdmin:      true,
+			Name:         name,
+			PrimaryEmail: email,
+			Domain:       domain,
+			IsAdmin:      environ.IsAdmin(email),
 		}
 		id, err := repo.Insert(ctx, sub)
 		if err != nil {
