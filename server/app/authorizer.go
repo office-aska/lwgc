@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"context"
@@ -50,12 +50,12 @@ func authorizer(next echo.HandlerFunc) echo.HandlerFunc {
 		if err != nil {
 			return err
 		}
+		user.ID = userID
 		ctx = context.WithValue(
 			ctx, model.User{}, user,
 		)
 		c.SetRequest(r.WithContext(ctx))
 		r = c.Request()
-		// user := perm.Bind(c, userID)
 		if user.IsAdmin {
 			return next(c)
 		}

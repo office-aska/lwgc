@@ -240,16 +240,18 @@ func (repo *organizationUserRepository) Free() {
 
 // OrganizationUserSearchParam - params for search
 type OrganizationUserSearchParam struct {
-	OrganizationID       *QueryChainer
-	PrimaryEmail         *QueryChainer
-	LINEWorksAccessToken *QueryChainer
-	CreatedAt            *QueryChainer
-	CreatedBy            *QueryChainer
-	DeletedAt            *QueryChainer
-	DeletedBy            *QueryChainer
-	UpdatedAt            *QueryChainer
-	UpdatedBy            *QueryChainer
-	Version              *QueryChainer
+	OrganizationID            *QueryChainer
+	PrimaryEmail              *QueryChainer
+	LINEWorksAccessToken      *QueryChainer
+	GoogleCalendarEmail       *QueryChainer
+	GoogleCalendarAccessToken *QueryChainer
+	CreatedAt                 *QueryChainer
+	CreatedBy                 *QueryChainer
+	DeletedAt                 *QueryChainer
+	DeletedBy                 *QueryChainer
+	UpdatedAt                 *QueryChainer
+	UpdatedBy                 *QueryChainer
+	Version                   *QueryChainer
 
 	IncludeSoftDeleted bool
 	CursorLimit        int
@@ -257,16 +259,18 @@ type OrganizationUserSearchParam struct {
 
 // OrganizationUserUpdateParam - params for strict updates
 type OrganizationUserUpdateParam struct {
-	OrganizationID       interface{}
-	PrimaryEmail         interface{}
-	LINEWorksAccessToken interface{}
-	CreatedAt            interface{}
-	CreatedBy            interface{}
-	DeletedAt            interface{}
-	DeletedBy            interface{}
-	UpdatedAt            interface{}
-	UpdatedBy            interface{}
-	Version              interface{}
+	OrganizationID            interface{}
+	PrimaryEmail              interface{}
+	LINEWorksAccessToken      interface{}
+	GoogleCalendarEmail       interface{}
+	GoogleCalendarAccessToken interface{}
+	CreatedAt                 interface{}
+	CreatedBy                 interface{}
+	DeletedAt                 interface{}
+	DeletedBy                 interface{}
+	UpdatedAt                 interface{}
+	UpdatedBy                 interface{}
+	Version                   interface{}
 }
 
 // Search - search documents
@@ -1245,6 +1249,24 @@ func (repo *organizationUserRepository) search(v interface{}, param *Organizatio
 			if direction := param.LINEWorksAccessToken.OrderByDirection; direction > 0 {
 				query = query.OrderBy("LINEWorksAccessToken", direction)
 				query = param.LINEWorksAccessToken.BuildCursorQuery(query)
+			}
+		}
+		if param.GoogleCalendarEmail != nil {
+			for _, chain := range param.GoogleCalendarEmail.QueryGroup {
+				query = query.Where("GoogleCalendarEmail", chain.Operator, chain.Value)
+			}
+			if direction := param.GoogleCalendarEmail.OrderByDirection; direction > 0 {
+				query = query.OrderBy("GoogleCalendarEmail", direction)
+				query = param.GoogleCalendarEmail.BuildCursorQuery(query)
+			}
+		}
+		if param.GoogleCalendarAccessToken != nil {
+			for _, chain := range param.GoogleCalendarAccessToken.QueryGroup {
+				query = query.Where("GoogleCalendarAccessToken", chain.Operator, chain.Value)
+			}
+			if direction := param.GoogleCalendarAccessToken.OrderByDirection; direction > 0 {
+				query = query.OrderBy("GoogleCalendarAccessToken", direction)
+				query = param.GoogleCalendarAccessToken.BuildCursorQuery(query)
 			}
 		}
 		if param.CreatedAt != nil {

@@ -208,7 +208,7 @@ func (repo *sessionRepository) RunInTransaction() func(ctx context.Context, f fu
 
 // SessionSearchParam - params for search
 type SessionSearchParam struct {
-	Email     *QueryChainer
+	UserID    *QueryChainer
 	CreatedAt *QueryChainer
 	CreatedBy *QueryChainer
 	DeletedAt *QueryChainer
@@ -223,7 +223,7 @@ type SessionSearchParam struct {
 
 // SessionUpdateParam - params for strict updates
 type SessionUpdateParam struct {
-	Email     interface{}
+	UserID    interface{}
 	CreatedAt interface{}
 	CreatedBy interface{}
 	DeletedAt interface{}
@@ -1109,13 +1109,13 @@ func (repo *sessionRepository) search(v interface{}, param *SessionSearchParam, 
 	}()
 
 	if q == nil {
-		if param.Email != nil {
-			for _, chain := range param.Email.QueryGroup {
-				query = query.Where("Email", chain.Operator, chain.Value)
+		if param.UserID != nil {
+			for _, chain := range param.UserID.QueryGroup {
+				query = query.Where("UserID", chain.Operator, chain.Value)
 			}
-			if direction := param.Email.OrderByDirection; direction > 0 {
-				query = query.OrderBy("Email", direction)
-				query = param.Email.BuildCursorQuery(query)
+			if direction := param.UserID.OrderByDirection; direction > 0 {
+				query = query.OrderBy("UserID", direction)
+				query = param.UserID.BuildCursorQuery(query)
 			}
 		}
 		if param.CreatedAt != nil {

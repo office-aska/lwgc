@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"io"
@@ -21,14 +21,7 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 	ctx := c.Request().Context()
 	d, ok := data.(map[string]interface{})
 	if ok {
-		// 	if user := perm.User(c); user != nil {
-		// 		d["signInUser"] = user
-		// 	}
 		d["PROJECT_ID"] = environ.GetProjectID()
-		// 	d["FIREBASE_APP_ID"] = os.Getenv("FIREBASE_APP_ID")
-		// 	d["FIREBASE_APP_ID"] = os.Getenv("FIREBASE_APP_ID")
-		// 	d["FIREBASE_API_KEY"] = os.Getenv("FIREBASE_API_KEY")
-		// 	d["FIREBASE_MESSAGING_SENDER_ID"] = os.Getenv("FIREBASE_MESSAGING_SENDER_ID")
 		user, ok := ctx.Value(model.User{}).(*model.User)
 		if ok {
 			d["signInUser"] = user

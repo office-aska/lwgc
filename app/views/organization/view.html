@@ -1,0 +1,47 @@
+{{- define "content" -}}
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item" aria-current="page"><a href="../">組織管理</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ .row.Name }}</li>
+    </ol>
+  </nav>
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="#">基本情報</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="user/">ユーザー</a>
+    </li>
+  </ul>
+  <div class="my-4">
+    <a class="btn btn-primary" href="update">編集</a>
+  </div>
+  <table class="table table-bordered table-hover">
+    <tbody>
+      <tr class="">
+        <th>組織ID</th>
+        <td>{{ .row.ID }}</td>
+      </tr>
+      <tr class="">
+        <th>組織名</th>
+        <td>{{ .row.Name }}</td>
+      </tr>
+      <tr class="">
+        <th>登録</th>
+        <td>
+          <div>{{ .row.CreatedAt | DateTime }}</div>
+          <div>{{ .row.CreatedBy }}</div>
+        </td>
+      </tr>
+      <tr class="">
+        <th>更新</th>
+        <td>
+          <div>{{ .row.UpdatedAt | DateTime }}</div>
+          <div>{{ .row.UpdatedBy }}</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{{- end -}}

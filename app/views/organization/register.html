@@ -1,0 +1,43 @@
+{{- define "content" -}}
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      {{ if .row.ID }}
+      <li class="breadcrumb-item" aria-current="page"><a href="../">組織管理</a></li>
+      <li class="breadcrumb-item" aria-current="page"><a href="./">{{ .row.Name }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">編集</li>
+      {{ else }}
+      <li class="breadcrumb-item" aria-current="page"><a href="./">組織管理</a></li>
+      <li class="breadcrumb-item active" aria-current="page">新規登録</li>
+      {{ end }}
+    </ol>
+  </nav>
+  <form method="post" onsubmit="return confirm('内容にお間違いありませんか？')">
+    {{ .csrfField }}
+    <div class="card">
+      <div class="card-body">
+        <div class="mb-3 row">
+          <label for="Name" class="col-4 col-form-label">組織名</label>
+          <div class="col-8">
+            <input
+              class="form-control"
+              type="text"
+              id="Name"
+              name="Name"
+              value="{{ .row.Name }}"
+              required="required"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8 offset-4">
+            <button type="submit" class="btn btn-primary" role="button">
+              登録
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{{- end -}}

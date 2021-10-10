@@ -1,0 +1,49 @@
+{{- define "content" -}}
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item" aria-current="page"><a href="../../">組織管理</a></li>
+      <li class="breadcrumb-item" aria-current="page"><a href="../">{{ .org.Name }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ .row.PrimaryEmail }}</li>
+    </ol>
+  </nav>
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link" aria-current="page" href="../../">基本情報</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" href="../">ユーザー</a>
+    </li>
+  </ul>
+  <div class="my-4">
+    <a class="btn btn-secondary me-3" href="../">ユーザー一覧へ</a>
+    <a class="btn btn-primary" href="update">編集</a>
+  </div>
+  <table class="table table-bordered table-hover">
+    <tbody>
+      <tr class="">
+        <th>ユーザーID</th>
+        <td>{{ .row.ID }}</td>
+      </tr>
+      <tr class="">
+        <th>メールアドレス</th>
+        <td>{{ .row.PrimaryEmail }}</td>
+      </tr>
+      <tr class="">
+        <th>登録</th>
+        <td>
+          <div>{{ .row.CreatedAt | DateTime }}</div>
+          <div>{{ .row.CreatedBy }}</div>
+        </td>
+      </tr>
+      <tr class="">
+        <th>更新</th>
+        <td>
+          <div>{{ .row.UpdatedAt | DateTime }}</div>
+          <div>{{ .row.UpdatedBy }}</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{{- end -}}

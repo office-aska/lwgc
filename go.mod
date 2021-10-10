@@ -8,6 +8,7 @@ require (
 	github.com/gcp-kit/stalog v0.1.0 // indirect
 	github.com/go-utils/dedupe v0.2.1
 	github.com/golang/mock v1.6.0
+	github.com/joho/godotenv v1.3.0 // indirect
 	github.com/labstack/echo/v4 v4.6.1
 	github.com/mattn/goreman v0.3.7 // indirect
 	golang.org/x/oauth2 v0.0.0-20210201163806-010130855d6c // indirect

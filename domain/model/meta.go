@@ -2,9 +2,8 @@ package model
 
 import (
 	"context"
+	"fmt"
 	"time"
-
-	"github.com/office-aska/lwgc/pkg/extract"
 )
 
 // Meta - メタ情報
@@ -20,16 +19,19 @@ type Meta struct {
 
 // Update - メタ情報を更新する
 func (m *Meta) Update(ctx context.Context) error {
-	id, ok := extract.UserID(ctx)
+	u, ok := ctx.Value(User{}).(*User)
 
 	if m.Version == 0 {
 		if ok {
-			m.CreatedBy = id
+			m.CreatedBy = u.ID
 		}
 	}
 
 	if ok {
-		m.UpdatedBy = id
+		m.UpdatedBy = u.ID
+		fmt.Printf("Find User %+v", u)
+	} else {
+		fmt.Println("Missing User")
 	}
 
 	return nil

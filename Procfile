@@ -1,1 +1,1 @@
-web1: reflex -R '(\.git|vendor)' -r '(\.html$|\.go$|go\.mod)' -s go run app/*.go
+web1: reflex -R '(\.git|vendor)' -r '(\.html$|\.go$|go\.mod)' -s go run app/main.go
