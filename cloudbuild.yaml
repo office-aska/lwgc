@@ -1,0 +1,26 @@
+steps:
+- name: "gcr.io/cloud-builders/gcloud"
+  entrypoint: /bin/sh
+  args:
+  - "-c"
+  - |
+    cat << EOF > secret.yaml
+    env_variables:
+      GOOGLE_OAUTH_CLIENT_ID: $$GOOGLE_OAUTH_CLIENT_ID
+      GOOGLE_OAUTH_CLIENT_SECRET: $$GOOGLE_OAUTH_CLIENT_SECRET
+    EOF
+  secretEnv:
+  - 'GOOGLE_OAUTH_CLIENT_ID'
+  - 'GOOGLE_OAUTH_CLIENT_SECRET'
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+    - 'app'
+    - 'deploy'
+    - '--project=$PROJECT_ID'
+    - 'app.yaml'
+availableSecrets:
+  secretManager:
+  - versionName: projects/$PROJECT_ID/secrets/GOOGLE_OAUTH_CLIENT_ID/versions/1
+    env: GOOGLE_OAUTH_CLIENT_ID
+  - versionName: projects/$PROJECT_ID/secrets/GOOGLE_OAUTH_CLIENT_SECRET/versions/1
+    env: GOOGLE_OAUTH_CLIENT_SECRET
